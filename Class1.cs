@@ -81,11 +81,13 @@ namespace RichPresenceSFS
                         {
                             if (rocket.stats.tracker.state_Orbit == Tracker.State_Orbit.Sub)
                             {
-                                return "Ap: " + (Math.Max(0, orbit.apoapsis - orbit.Planet.Radius) / 1000).Round(1) + " km" + (orbit.periapsis > orbit.Planet.Radius ? (", Pe: " + (Math.Max(0, orbit.periapsis - orbit.Planet.Radius) / 1000).Round(1) + " km") : (", Alt: " + (rocket.location.Value.Height / 1000).Round(1) + " km"));
-                            } else if (rocket.stats.tracker.state_Orbit == Tracker.State_Orbit.Esc)
+                                return "Alt: " + (rocket.location.Value.Height / 1000).Round(1) + " km, Ap: " + (Math.Max(0, orbit.apoapsis - orbit.Planet.Radius) / 1000).Round(1) + " km" + (orbit.periapsis > orbit.Planet.Radius ? (", Pe: " + (Math.Max(0, orbit.periapsis - orbit.Planet.Radius) / 1000).Round(1) + " km") : "");
+                            }
+                            else if (rocket.stats.tracker.state_Orbit == Tracker.State_Orbit.Esc)
                             {
-                                return "Pe: " + (Math.Max(0, orbit.apoapsis + orbit.Planet.Radius) / 1000).Round(1) + " km";
-                            } else if (rocket.stats.tracker.state_Orbit == Tracker.State_Orbit.None)
+                                return "Alt: " + (rocket.location.Value.Height / 1000).Round(1) + " km, Pe: " + (Math.Max(0, orbit.apoapsis + orbit.Planet.Radius) / 1000).Round(1) + " km";
+                            }
+                            else if (rocket.stats.tracker.state_Orbit == Tracker.State_Orbit.None)
                             {
                                 var landmark = rocket.location.planet.Value.landmarks.ToList().GetBest((a, b) =>
                                 {
@@ -93,7 +95,7 @@ namespace RichPresenceSFS
                                 });
                                 return landmark != null ? ("Near" + landmark.displayName) : "Location: Unknown";
                             }
-                            return "Ap: " + (Math.Max(0, orbit.apoapsis - orbit.Planet.Radius) / 1000).Round(1) + " km, Pe: " + (Math.Max(0, orbit.periapsis - orbit.Planet.Radius) / 1000).Round(1) + " km";
+                            return "Alt: " + (rocket.location.Value.Height / 1000).Round(1) + " km, Ap: " + (Math.Max(0, orbit.apoapsis - orbit.Planet.Radius) / 1000).Round(1) + " km, Pe: " + (Math.Max(0, orbit.periapsis - orbit.Planet.Radius) / 1000).Round(1) + " km";
                         }
 
                         if (rocket.stats.tracker.state_Landed)
@@ -125,7 +127,7 @@ namespace RichPresenceSFS
                             return "Landed on " + GetPlanetName(rocket);
                         }
 
-                        switch (rocket.stats.tracker.state_Orbit) 
+                        switch (rocket.stats.tracker.state_Orbit)
                         {
                             case Tracker.State_Orbit.None:
                                 return "Nearby " + GetPlanetName(rocket);
@@ -140,22 +142,6 @@ namespace RichPresenceSFS
                             case Tracker.State_Orbit.Esc:
                                 return "Escaping " + GetPlanetName(rocket);
                         }
-
-
-                        /*
-                        if (success && orbit.periapsis > orbit.Planet.Radius)
-                        {
-                            return "Orbiting " + orbit.Planet.codeName;
-                        } else
-                        {
-                            if (orbit.apoapsis < orbit.Planet.maxTerrainHeight + rocket.stats)
-                            {
-                                return "On the surface of " + rocket.location.planet.Value.codeName;
-                            } else
-                            {
-                                
-                            }
-                        }*/
                     }
                     else
                     {
@@ -176,10 +162,6 @@ namespace RichPresenceSFS
                     LargeImageText = "Spaceflight Simulator"
                 }
             });
-        }
-
-        private void Update()
-        {
         }
     }
 }
